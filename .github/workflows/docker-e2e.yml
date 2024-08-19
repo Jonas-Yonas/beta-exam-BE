@@ -11,23 +11,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      # <database-relational-block>
-      - name: Run e2e tests for NestJS with TypeORM
-        id: relational
-        run: docker compose -f docker-compose.relational.ci.yaml --env-file env-example-relational -p ci-relational up --build --exit-code-from api
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Specify the Node.js version
 
-      - name: Copy prod.log from container to host
-        if: ${{ failure() && steps.relational.conclusion == 'failure' }}
-        run: docker cp ci-relational-api-1:/usr/src/app/prod.log .
-      # </database-relational-block>
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
 
-      
+      - name: Run Database Migrations
+        env:
+          DATABASE_URL: postgresql://betaexamprep:oKKy0mxBjkbW9M0gk0Z8nOLAYKDtGAb5@dpg-cr1jmg5ds78s739t77dg-a/betaexamprep  # Set your DB connection string
+        run: npm run migration:run
 
+      - name: Seed the Database
+        env:
+          DATABASE_URL: postgresql://betaexamprep:oKKy0mxBjkbW9M0gk0Z8nOLAYKDtGAb5@dpg-cr1jmg5ds78s739t77dg-a/betaexamprep  # Set your DB connection string
+        run: npm run seed:run:relational
+
+
+      # Upload logs if tests fail
       - name: Upload prod.log to artifacts for debugging
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: prod-logs
           path: prod.log
+
+      # Deploy to Render on successful push to main
+      - name: Deploy to Render
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          curl -X POST -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"serviceId": "'${{ secrets.RENDER_SERVICE_ID }}'"}' \
+          https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
