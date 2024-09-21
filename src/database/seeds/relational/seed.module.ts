@@ -14,8 +14,11 @@ import { PermissionSeedModule } from './permission/permission-seed.module';
 
 import { GradeSeedModule } from './grade/grade-seed.module';
 
+import { SubjectSeedModule } from './subject/subject-seed.module';
+
 @Module({
   imports: [
+    SubjectSeedModule,
     GradeSeedModule,
     PermissionSeedModule,
     RoleSeedModule,

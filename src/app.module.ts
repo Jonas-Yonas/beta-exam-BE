@@ -31,8 +31,11 @@ import { PermissionsModule } from './permissions/permissions.module';
 
 import { GradesModule } from './grades/grades.module';
 
+import { SubjectsModule } from './subjects/subjects.module';
+
 @Module({
   imports: [
+    SubjectsModule,
     GradesModule,
     PermissionsModule,
     ConfigModule.forRoot({
