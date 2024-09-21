@@ -5,7 +5,7 @@ export class Question {
   id: string;
 
   @ApiProperty({ description: 'The status of the question, e.g., active, inactive.' })
-  status: string;
+  status: number;
 
   @ApiProperty({ description: 'The content or body of the question.' })
   content: string;

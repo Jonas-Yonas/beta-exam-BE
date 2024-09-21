@@ -1,7 +1,4 @@
 import {
-  IsOptional,
-  // decorators here
-
 
 IsString,
 IsUUID,
@@ -17,17 +14,13 @@ IsUUID,
 import { 
   // decorators here
 ApiProperty,
-ApiPropertyOptional,
 
 } from '@nestjs/swagger';
-import { StatusDto } from '../../statuses/dto/status.dto';
-import { Type } from 'class-transformer';
+
 
 export class CreateQuestionDto {
-  @ApiPropertyOptional({ type: StatusDto })
-  @IsOptional()
-  @Type(() => StatusDto)
-  status?: StatusDto;
+  @ApiProperty()
+  status: number;
   @ApiProperty()
     @IsString()
         content: string;
