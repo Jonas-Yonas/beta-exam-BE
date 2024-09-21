@@ -20,8 +20,11 @@ import { ChapterSeedModule } from './chapter/chapter-seed.module';
 
 import { CurriculumSeedModule } from './curriculum/curriculum-seed.module';
 
+import { QuestionSeedModule } from './question/question-seed.module';
+
 @Module({
   imports: [
+    QuestionSeedModule,
     CurriculumSeedModule,
     ChapterSeedModule,
     SubjectSeedModule,

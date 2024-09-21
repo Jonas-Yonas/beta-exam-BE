@@ -37,8 +37,11 @@ import { ChaptersModule } from './chapters/chapters.module';
 
 import { CurriculumsModule } from './curriculums/curriculums.module';
 
+import { QuestionsModule } from './questions/questions.module';
+
 @Module({
   imports: [
+    QuestionsModule,
     CurriculumsModule,
     ChaptersModule,
     SubjectsModule,
