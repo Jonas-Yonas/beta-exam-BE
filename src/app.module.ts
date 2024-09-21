@@ -27,8 +27,11 @@ const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
   },
 });
 
+import { PermissionsModule } from './permissions/permissions.module';
+
 @Module({
   imports: [
+    PermissionsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig, authConfig, appConfig, mailConfig, fileConfig],
