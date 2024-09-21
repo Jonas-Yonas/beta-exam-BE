@@ -18,8 +18,11 @@ import { SubjectSeedModule } from './subject/subject-seed.module';
 
 import { ChapterSeedModule } from './chapter/chapter-seed.module';
 
+import { CurriculumSeedModule } from './curriculum/curriculum-seed.module';
+
 @Module({
   imports: [
+    CurriculumSeedModule,
     ChapterSeedModule,
     SubjectSeedModule,
     GradeSeedModule,

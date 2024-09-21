@@ -35,8 +35,11 @@ import { SubjectsModule } from './subjects/subjects.module';
 
 import { ChaptersModule } from './chapters/chapters.module';
 
+import { CurriculumsModule } from './curriculums/curriculums.module';
+
 @Module({
   imports: [
+    CurriculumsModule,
     ChaptersModule,
     SubjectsModule,
     GradesModule,
