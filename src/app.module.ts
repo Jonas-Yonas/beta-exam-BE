@@ -29,8 +29,11 @@ const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
 
 import { PermissionsModule } from './permissions/permissions.module';
 
+import { GradesModule } from './grades/grades.module';
+
 @Module({
   imports: [
+    GradesModule,
     PermissionsModule,
     ConfigModule.forRoot({
       isGlobal: true,

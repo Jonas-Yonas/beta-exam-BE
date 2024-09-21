@@ -12,8 +12,11 @@ import appConfig from '../../../config/app.config';
 
 import { PermissionSeedModule } from './permission/permission-seed.module';
 
+import { GradeSeedModule } from './grade/grade-seed.module';
+
 @Module({
   imports: [
+    GradeSeedModule,
     PermissionSeedModule,
     RoleSeedModule,
     StatusSeedModule,
