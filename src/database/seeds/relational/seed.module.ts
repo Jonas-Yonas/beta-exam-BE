@@ -16,8 +16,11 @@ import { GradeSeedModule } from './grade/grade-seed.module';
 
 import { SubjectSeedModule } from './subject/subject-seed.module';
 
+import { ChapterSeedModule } from './chapter/chapter-seed.module';
+
 @Module({
   imports: [
+    ChapterSeedModule,
     SubjectSeedModule,
     GradeSeedModule,
     PermissionSeedModule,

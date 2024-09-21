@@ -33,8 +33,11 @@ import { GradesModule } from './grades/grades.module';
 
 import { SubjectsModule } from './subjects/subjects.module';
 
+import { ChaptersModule } from './chapters/chapters.module';
+
 @Module({
   imports: [
+    ChaptersModule,
     SubjectsModule,
     GradesModule,
     PermissionsModule,

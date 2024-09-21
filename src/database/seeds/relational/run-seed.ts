@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ChapterSeedService } from './chapter/chapter-seed.service';
 import { SubjectSeedService } from './subject/subject-seed.service';
 import { GradeSeedService } from './grade/grade-seed.service';
 import { PermissionSeedService } from './permission/permission-seed.service';
@@ -20,6 +21,8 @@ const runSeed = async () => {
   await app.get(GradeSeedService).run();
 
   await app.get(SubjectSeedService).run();
+
+  await app.get(ChapterSeedService).run();
 
   await app.close();
 };
