@@ -8,10 +8,13 @@ import {AuthGuard} from '@nestjs/passport';
 import {InfinityPaginationResponse, InfinityPaginationResponseDto} from '../utils/dto/infinity-pagination-response.dto';
 import {infinityPagination} from '../utils/infinity-pagination';
 import {FindAllChaptersDto} from './dto/find-all-chapters.dto';
+import { RolesGuard } from '../roles/roles.guard';
+import { RoleEnum } from '../roles/roles.enum';
+import { Roles } from '../roles/roles.decorator';
 
 @ApiTags('Chapters')
 @ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller({
   path: 'chapters',
   version: '1'
@@ -23,6 +26,7 @@ export class ChaptersController {
   @ApiCreatedResponse({
     type: Chapter
   })
+  @Roles(RoleEnum.admin)
   create(@Body() createChapterDto: CreateChapterDto) {
     return this.chaptersService.create(createChapterDto);
   }
