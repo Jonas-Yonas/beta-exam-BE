@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
 export class CreateUser1715028537217 implements MigrationInterface {
   name = 'CreateUser1715028537217';
@@ -43,6 +43,12 @@ export class CreateUser1715028537217 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "session" ADD CONSTRAINT "FK_3d2f174ef04fb312fdebd0ddc53" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
+    await queryRunner.addColumn('users', new TableColumn({
+      name: 'phoneNumber',
+      type: 'varchar',
+      isNullable: false,
+      isUnique: true, // Make it unique
+  }));
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -75,5 +81,6 @@ export class CreateUser1715028537217 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "file"`);
     await queryRunner.query(`DROP TABLE "status"`);
     await queryRunner.query(`DROP TABLE "role"`);
+    await queryRunner.dropColumn('users', 'phoneNumber');
   }
 }

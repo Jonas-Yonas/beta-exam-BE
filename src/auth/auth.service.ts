@@ -28,6 +28,7 @@ import { Session } from '../session/domain/session';
 import { SessionService } from '../session/session.service';
 import { StatusEnum } from '../statuses/statuses.enum';
 import { User } from '../users/domain/user';
+import { AuthPhoneNumberLoginDto } from './dto/auth-phone-login.dto';
 
 @Injectable()
 export class AuthService {
@@ -39,6 +40,85 @@ export class AuthService {
     private configService: ConfigService<AllConfigType>,
   ) {}
 
+
+  
+  async validatePhoneLogin(loginDto: AuthPhoneNumberLoginDto): Promise<LoginResponseDto> {
+
+    const user = await this.usersService.findByPhoneNumber(loginDto.phoneNumber);
+
+    if (!user) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          email: 'notFound',
+        },
+      });
+    }
+
+    if (user.provider !== AuthProvidersEnum.email) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          email: `needLoginViaProvider:${user.provider}`,
+        },
+      });
+    }
+        if (user.provider !== AuthProvidersEnum.email) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          email: `needLoginViaProvider:${user.provider}`,
+        },
+      });
+    }
+
+    if (!user.password) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          password: 'incorrectPassword',
+        },
+      });
+    }
+
+    const isValidPassword = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
+
+    if (!isValidPassword) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          password: 'incorrectPassword',
+        },
+      });
+    }
+
+    const hash = crypto
+      .createHash('sha256')
+      .update(randomStringGenerator())
+      .digest('hex');
+
+    const session = await this.sessionService.create({
+      user,
+      hash,
+    });
+
+    const { token, refreshToken, tokenExpires } = await this.getTokensData({
+      id: user.id,
+      role: user.role,
+      sessionId: session.id,
+      hash,
+    });
+
+    return {
+      refreshToken,
+      token,
+      tokenExpires,
+      user,
+    };
+  }
   async validateLogin(loginDto: AuthEmailLoginDto): Promise<LoginResponseDto> {
     const user = await this.usersService.findByEmail(loginDto.email);
 
@@ -52,6 +132,14 @@ export class AuthService {
     }
 
     if (user.provider !== AuthProvidersEnum.email) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          email: `needLoginViaProvider:${user.provider}`,
+        },
+      });
+    }
+        if (user.provider !== AuthProvidersEnum.email) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
@@ -197,6 +285,7 @@ export class AuthService {
     const user = await this.usersService.create({
       ...dto,
       email: dto.email,
+      phoneNumber: dto.phoneNumber,
       role: {
         id: RoleEnum.user,
       },

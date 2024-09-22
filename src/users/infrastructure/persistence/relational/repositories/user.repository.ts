@@ -75,6 +75,10 @@ export class UsersRelationalRepository implements UserRepository {
     return entity ? UserMapper.toDomain(entity) : null;
   }
 
+  async findByPhoneNumber(phoneNumber: string): Promise<NullableType<User>> {
+    return await this.usersRepository.findOne({ where: { phoneNumber } });
+  }
+
   async findBySocialIdAndProvider({
     socialId,
     provider,

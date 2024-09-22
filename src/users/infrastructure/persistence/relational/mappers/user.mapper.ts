@@ -8,6 +8,7 @@ import { UserEntity } from '../entities/user.entity';
 export class UserMapper {
   static toDomain(raw: UserEntity): User {
     const domainEntity = new User();
+domainEntity.phoneNumber = raw.phoneNumber;
     domainEntity.id = raw.id;
     domainEntity.email = raw.email;
     domainEntity.password = raw.password;
@@ -53,6 +54,7 @@ export class UserMapper {
     }
 
     const persistenceEntity = new UserEntity();
+persistenceEntity.phoneNumber = domainEntity.phoneNumber;
     if (domainEntity.id && typeof domainEntity.id === 'number') {
       persistenceEntity.id = domainEntity.id;
     }

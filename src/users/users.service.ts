@@ -48,6 +48,18 @@ export class UsersService {
       }
     }
 
+    if (clonedPayload.phoneNumber) {
+      const userByPhone = await this.usersRepository.findByEmail(
+        clonedPayload.email,
+      );
+      if (userByPhone) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: { phoneNumber: 'phoneNumberAlreadyExists' },
+        });
+      }
+    }
+
     if (clonedPayload.photo?.id) {
       const fileObject = await this.filesService.findById(
         clonedPayload.photo.id,
@@ -116,6 +128,10 @@ export class UsersService {
 
   findByEmail(email: User['email']): Promise<NullableType<User>> {
     return this.usersRepository.findByEmail(email);
+  }
+
+  findByPhoneNumber(phoneNumber: User['phoneNumber']): Promise<NullableType<User>> {
+    return this.usersRepository.findByPhoneNumber(phoneNumber);;
   }
 
   findBySocialIdAndProvider({

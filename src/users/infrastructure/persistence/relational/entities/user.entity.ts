@@ -22,12 +22,16 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
 // We duplicate these rules because you can choose not to use adapters
 // in your project and return an ORM entity directly in response.
 import { Exclude, Expose } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 @Entity({
   name: 'user',
 })
 export class UserEntity extends EntityRelationalHelper {
+@ApiPropertyOptional()
+@Column()
+phoneNumber?: string;
+
   @ApiProperty({
     type: Number,
   })
