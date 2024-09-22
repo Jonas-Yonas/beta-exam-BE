@@ -22,12 +22,14 @@ describe('Users Module', () => {
     const newUserChangedEmail = `user-first-changed.${Date.now()}@example.com`;
     const newUserPassword = `secret`;
     const newUserChangedPassword = `new-secret`;
+    const newUserPhone = '+2519139008';
 
     beforeAll(async () => {
       await request(app)
         .post('/api/v1/auth/email/register')
         .send({
           email: newUserEmail,
+          phoneNumber: newUserPhone,
           password: newUserPassword,
           firstName: `First${Date.now()}`,
           lastName: 'E2E'
