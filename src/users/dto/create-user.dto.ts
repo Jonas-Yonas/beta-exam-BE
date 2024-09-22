@@ -1,27 +1,24 @@
-import { Transform, Type } from 'class-transformer';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {Transform, Type} from 'class-transformer';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {
   // decorators here
   IsEmail,
   IsNotEmpty,
   IsOptional,
   MinLength,
-
-
-IsString,
-
+  IsString
 } from 'class-validator';
-import { FileDto } from '../../files/dto/file.dto';
-import { RoleDto } from '../../roles/dto/role.dto';
-import { StatusDto } from '../../statuses/dto/status.dto';
-import { lowerCaseTransformer } from '../../utils/transformers/lower-case.transformer';
+import {FileDto} from '../../files/dto/file.dto';
+import {RoleDto} from '../../roles/dto/role.dto';
+import {StatusDto} from '../../statuses/dto/status.dto';
+import {lowerCaseTransformer} from '../../utils/transformers/lower-case.transformer';
 
 export class CreateUserDto {
   @ApiPropertyOptional()
-    @IsString()
-        phoneNumber?: string;
+  @IsString()
+  phoneNumber?: string;
 
-  @ApiProperty({ example: 'test1@example.com', type: String })
+  @ApiProperty({example: 'test1@example.com', type: String})
   @Transform(lowerCaseTransformer)
   @IsNotEmpty()
   @IsEmail()
@@ -35,24 +32,24 @@ export class CreateUserDto {
 
   socialId?: string | null;
 
-  @ApiProperty({ example: 'John', type: String })
+  @ApiProperty({example: 'John', type: String})
   @IsNotEmpty()
   firstName: string | null;
 
-  @ApiProperty({ example: 'Doe', type: String })
+  @ApiProperty({example: 'Doe', type: String})
   @IsNotEmpty()
   lastName: string | null;
 
-  @ApiPropertyOptional({ type: () => FileDto })
+  @ApiPropertyOptional({type: () => FileDto})
   @IsOptional()
   photo?: FileDto | null;
 
-  @ApiPropertyOptional({ type: RoleDto })
+  @ApiPropertyOptional({type: RoleDto})
   @IsOptional()
   @Type(() => RoleDto)
   role?: RoleDto | null;
 
-  @ApiPropertyOptional({ type: StatusDto })
+  @ApiPropertyOptional({type: StatusDto})
   @IsOptional()
   @Type(() => StatusDto)
   status?: StatusDto;

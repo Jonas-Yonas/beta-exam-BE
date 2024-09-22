@@ -9,50 +9,50 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   JoinColumn,
-  OneToOne,
+  OneToOne
 } from 'typeorm';
-import { RoleEntity } from '../../../../../roles/infrastructure/persistence/relational/entities/role.entity';
-import { StatusEntity } from '../../../../../statuses/infrastructure/persistence/relational/entities/status.entity';
-import { FileEntity } from '../../../../../files/infrastructure/persistence/relational/entities/file.entity';
+import {RoleEntity} from '../../../../../roles/infrastructure/persistence/relational/entities/role.entity';
+import {StatusEntity} from '../../../../../statuses/infrastructure/persistence/relational/entities/status.entity';
+import {FileEntity} from '../../../../../files/infrastructure/persistence/relational/entities/file.entity';
 
-import { AuthProvidersEnum } from '../../../../../auth/auth-providers.enum';
-import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
+import {AuthProvidersEnum} from '../../../../../auth/auth-providers.enum';
+import {EntityRelationalHelper} from '../../../../../utils/relational-entity-helper';
 
 // We use class-transformer in ORM entity and domain entity.
 // We duplicate these rules because you can choose not to use adapters
 // in your project and return an ORM entity directly in response.
-import { Exclude, Expose } from 'class-transformer';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {Exclude, Expose} from 'class-transformer';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 
 @Entity({
-  name: 'user',
+  name: 'user'
 })
 export class UserEntity extends EntityRelationalHelper {
-@ApiPropertyOptional()
-@Column()
-phoneNumber?: string;
+  @ApiPropertyOptional()
+  @Column()
+  phoneNumber?: string;
 
   @ApiProperty({
-    type: Number,
+    type: Number
   })
   @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty({
     type: String,
-    example: 'john.doe@example.com',
+    example: 'john.doe@example.com'
   })
   // For "string | null" we need to use String type.
   // More info: https://github.com/typeorm/typeorm/issues/2567
-  @Column({ type: String, unique: true, nullable: true })
-  @Expose({ groups: ['me', 'admin'] })
+  @Column({type: String, unique: true, nullable: true})
+  @Expose({groups: ['me', 'admin']})
   email: string | null;
 
-  @Column({ nullable: true })
-  @Exclude({ toPlainOnly: true })
+  @Column({nullable: true})
+  @Exclude({toPlainOnly: true})
   password?: string;
 
-  @Exclude({ toPlainOnly: true })
+  @Exclude({toPlainOnly: true})
   public previousPassword?: string;
 
   @AfterLoad()
@@ -62,59 +62,59 @@ phoneNumber?: string;
 
   @ApiProperty({
     type: String,
-    example: 'email',
+    example: 'email'
   })
-  @Column({ default: AuthProvidersEnum.email })
-  @Expose({ groups: ['me', 'admin'] })
+  @Column({default: AuthProvidersEnum.email})
+  @Expose({groups: ['me', 'admin']})
   provider: string;
 
   @ApiProperty({
     type: String,
-    example: '1234567890',
+    example: '1234567890'
   })
   @Index()
-  @Column({ type: String, nullable: true })
-  @Expose({ groups: ['me', 'admin'] })
+  @Column({type: String, nullable: true})
+  @Expose({groups: ['me', 'admin']})
   socialId?: string | null;
 
   @ApiProperty({
     type: String,
-    example: 'John',
+    example: 'John'
   })
   @Index()
-  @Column({ type: String, nullable: true })
+  @Column({type: String, nullable: true})
   firstName: string | null;
 
   @ApiProperty({
     type: String,
-    example: 'Doe',
+    example: 'Doe'
   })
   @Index()
-  @Column({ type: String, nullable: true })
+  @Column({type: String, nullable: true})
   lastName: string | null;
 
   @ApiProperty({
-    type: () => FileEntity,
+    type: () => FileEntity
   })
   @OneToOne(() => FileEntity, {
-    eager: true,
+    eager: true
   })
   @JoinColumn()
   photo?: FileEntity | null;
 
   @ApiProperty({
-    type: () => RoleEntity,
+    type: () => RoleEntity
   })
   @ManyToOne(() => RoleEntity, {
-    eager: true,
+    eager: true
   })
   role?: RoleEntity | null;
 
   @ApiProperty({
-    type: () => StatusEntity,
+    type: () => StatusEntity
   })
   @ManyToOne(() => StatusEntity, {
-    eager: true,
+    eager: true
   })
   status?: StatusEntity;
 

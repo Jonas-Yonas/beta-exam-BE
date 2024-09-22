@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { CreateChapterDto } from './dto/create-chapter.dto';
-import { UpdateChapterDto } from './dto/update-chapter.dto';
-import { ChapterRepository } from './infrastructure/persistence/chapter.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { Chapter } from './domain/chapter';
+import {Injectable} from '@nestjs/common';
+import {CreateChapterDto} from './dto/create-chapter.dto';
+import {UpdateChapterDto} from './dto/update-chapter.dto';
+import {ChapterRepository} from './infrastructure/persistence/chapter.repository';
+import {IPaginationOptions} from '../utils/types/pagination-options';
+import {Chapter} from './domain/chapter';
 
 @Injectable()
 export class ChaptersService {
@@ -13,16 +13,12 @@ export class ChaptersService {
     return this.chapterRepository.create(createChapterDto);
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({paginationOptions}: {paginationOptions: IPaginationOptions}) {
     return this.chapterRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,
-        limit: paginationOptions.limit,
-      },
+        limit: paginationOptions.limit
+      }
     });
   }
 

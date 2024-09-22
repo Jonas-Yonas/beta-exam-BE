@@ -1,20 +1,20 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
-import { ApiProperty } from '@nestjs/swagger';
+import {Column, Entity, PrimaryColumn} from 'typeorm';
+import {EntityRelationalHelper} from '../../../../../utils/relational-entity-helper';
+import {ApiProperty} from '@nestjs/swagger';
 
 @Entity({
-  name: 'role',
+  name: 'role'
 })
 export class RoleEntity extends EntityRelationalHelper {
   @ApiProperty({
-    type: Number,
+    type: Number
   })
   @PrimaryColumn()
   id: number;
 
   @ApiProperty({
     type: String,
-    example: 'admin',
+    example: 'admin'
   })
   @Column()
   name?: string;

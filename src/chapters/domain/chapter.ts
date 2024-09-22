@@ -1,13 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import {ApiProperty} from '@nestjs/swagger';
 
 export class Chapter {
-
-
   @ApiProperty({
-    type: String,
+    type: String
   })
   id: string;
-  
+
   @ApiProperty()
   name: string;
 

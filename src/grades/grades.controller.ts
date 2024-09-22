@@ -1,46 +1,27 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Query,
-} from '@nestjs/common';
-import { GradesService } from './grades.service';
-import { CreateGradeDto } from './dto/create-grade.dto';
-import { UpdateGradeDto } from './dto/update-grade.dto';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
-import { Grade } from './domain/grade';
-import { AuthGuard } from '@nestjs/passport';
-import {
-  InfinityPaginationResponse,
-  InfinityPaginationResponseDto,
-} from '../utils/dto/infinity-pagination-response.dto';
-import { infinityPagination } from '../utils/infinity-pagination';
-import { FindAllGradesDto } from './dto/find-all-grades.dto';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query} from '@nestjs/common';
+import {GradesService} from './grades.service';
+import {CreateGradeDto} from './dto/create-grade.dto';
+import {UpdateGradeDto} from './dto/update-grade.dto';
+import {ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiTags} from '@nestjs/swagger';
+import {Grade} from './domain/grade';
+import {AuthGuard} from '@nestjs/passport';
+import {InfinityPaginationResponse, InfinityPaginationResponseDto} from '../utils/dto/infinity-pagination-response.dto';
+import {infinityPagination} from '../utils/infinity-pagination';
+import {FindAllGradesDto} from './dto/find-all-grades.dto';
 
 @ApiTags('Grades')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller({
   path: 'grades',
-  version: '1',
+  version: '1'
 })
 export class GradesController {
   constructor(private readonly gradesService: GradesService) {}
 
   @Post()
   @ApiCreatedResponse({
-    type: Grade,
+    type: Grade
   })
   create(@Body() createGradeDto: CreateGradeDto) {
     return this.gradesService.create(createGradeDto);
@@ -48,11 +29,9 @@ export class GradesController {
 
   @Get()
   @ApiOkResponse({
-    type: InfinityPaginationResponse(Grade),
+    type: InfinityPaginationResponse(Grade)
   })
-  async findAll(
-    @Query() query: FindAllGradesDto,
-  ): Promise<InfinityPaginationResponseDto<Grade>> {
+  async findAll(@Query() query: FindAllGradesDto): Promise<InfinityPaginationResponseDto<Grade>> {
     const page = query?.page ?? 1;
     let limit = query?.limit ?? 10;
     if (limit > 50) {
@@ -63,10 +42,10 @@ export class GradesController {
       await this.gradesService.findAllWithPagination({
         paginationOptions: {
           page,
-          limit,
-        },
+          limit
+        }
       }),
-      { page, limit },
+      {page, limit}
     );
   }
 
@@ -74,10 +53,10 @@ export class GradesController {
   @ApiParam({
     name: 'id',
     type: String,
-    required: true,
+    required: true
   })
   @ApiOkResponse({
-    type: Grade,
+    type: Grade
   })
   findOne(@Param('id') id: string) {
     return this.gradesService.findOne(id);
@@ -87,15 +66,12 @@ export class GradesController {
   @ApiParam({
     name: 'id',
     type: String,
-    required: true,
+    required: true
   })
   @ApiOkResponse({
-    type: Grade,
+    type: Grade
   })
-  update(
-    @Param('id') id: string,
-    @Body() updateGradeDto: UpdateGradeDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateGradeDto: UpdateGradeDto) {
     return this.gradesService.update(id, updateGradeDto);
   }
 
@@ -103,7 +79,7 @@ export class GradesController {
   @ApiParam({
     name: 'id',
     type: String,
-    required: true,
+    required: true
   })
   remove(@Param('id') id: string) {
     return this.gradesService.remove(id);

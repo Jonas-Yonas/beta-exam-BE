@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSubjectDto } from './dto/create-subject.dto';
-import { UpdateSubjectDto } from './dto/update-subject.dto';
-import { SubjectRepository } from './infrastructure/persistence/subject.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { Subject } from './domain/subject';
+import {Injectable} from '@nestjs/common';
+import {CreateSubjectDto} from './dto/create-subject.dto';
+import {UpdateSubjectDto} from './dto/update-subject.dto';
+import {SubjectRepository} from './infrastructure/persistence/subject.repository';
+import {IPaginationOptions} from '../utils/types/pagination-options';
+import {Subject} from './domain/subject';
 
 @Injectable()
 export class SubjectsService {
@@ -13,16 +13,12 @@ export class SubjectsService {
     return this.subjectRepository.create(createSubjectDto);
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({paginationOptions}: {paginationOptions: IPaginationOptions}) {
     return this.subjectRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,
-        limit: paginationOptions.limit,
-      },
+        limit: paginationOptions.limit
+      }
     });
   }
 

@@ -1,32 +1,28 @@
-import {
-  HttpStatus,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { NullableType } from '../utils/types/nullable.type';
-import { FilterUserDto, SortUserDto } from './dto/query-user.dto';
-import { UserRepository } from './infrastructure/persistence/user.repository';
-import { User } from './domain/user';
+import {HttpStatus, Injectable, UnprocessableEntityException} from '@nestjs/common';
+import {CreateUserDto} from './dto/create-user.dto';
+import {NullableType} from '../utils/types/nullable.type';
+import {FilterUserDto, SortUserDto} from './dto/query-user.dto';
+import {UserRepository} from './infrastructure/persistence/user.repository';
+import {User} from './domain/user';
 import bcrypt from 'bcryptjs';
-import { AuthProvidersEnum } from '../auth/auth-providers.enum';
-import { FilesService } from '../files/files.service';
-import { RoleEnum } from '../roles/roles.enum';
-import { StatusEnum } from '../statuses/statuses.enum';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { DeepPartial } from '../utils/types/deep-partial.type';
+import {AuthProvidersEnum} from '../auth/auth-providers.enum';
+import {FilesService} from '../files/files.service';
+import {RoleEnum} from '../roles/roles.enum';
+import {StatusEnum} from '../statuses/statuses.enum';
+import {IPaginationOptions} from '../utils/types/pagination-options';
+import {DeepPartial} from '../utils/types/deep-partial.type';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly usersRepository: UserRepository,
-    private readonly filesService: FilesService,
+    private readonly filesService: FilesService
   ) {}
 
   async create(createProfileDto: CreateUserDto): Promise<User> {
     const clonedPayload = {
       provider: AuthProvidersEnum.email,
-      ...createProfileDto,
+      ...createProfileDto
     };
 
     if (clonedPayload.password) {
@@ -35,70 +31,60 @@ export class UsersService {
     }
 
     if (clonedPayload.email) {
-      const userObject = await this.usersRepository.findByEmail(
-        clonedPayload.email,
-      );
+      const userObject = await this.usersRepository.findByEmail(clonedPayload.email);
       if (userObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            email: 'emailAlreadyExists',
-          },
+            email: 'emailAlreadyExists'
+          }
         });
       }
     }
 
     if (clonedPayload.phoneNumber) {
-      const userByPhone = await this.usersRepository.findByEmail(
-        clonedPayload.email,
-      );
+      const userByPhone = await this.usersRepository.findByEmail(clonedPayload.email);
       if (userByPhone) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: { phoneNumber: 'phoneNumberAlreadyExists' },
+          errors: {phoneNumber: 'phoneNumberAlreadyExists'}
         });
       }
     }
 
     if (clonedPayload.photo?.id) {
-      const fileObject = await this.filesService.findById(
-        clonedPayload.photo.id,
-      );
+      const fileObject = await this.filesService.findById(clonedPayload.photo.id);
       if (!fileObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            photo: 'imageNotExists',
-          },
+            photo: 'imageNotExists'
+          }
         });
       }
       clonedPayload.photo = fileObject;
     }
 
     if (clonedPayload.role?.id) {
-      const roleObject = Object.values(RoleEnum)
-        .map(String)
-        .includes(String(clonedPayload.role.id));
+      const roleObject = Object.values(RoleEnum).map(String).includes(String(clonedPayload.role.id));
       if (!roleObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            role: 'roleNotExists',
-          },
+            role: 'roleNotExists'
+          }
         });
       }
     }
 
     if (clonedPayload.status?.id) {
-      const statusObject = Object.values(StatusEnum)
-        .map(String)
-        .includes(String(clonedPayload.status.id));
+      const statusObject = Object.values(StatusEnum).map(String).includes(String(clonedPayload.status.id));
       if (!statusObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            status: 'statusNotExists',
-          },
+            status: 'statusNotExists'
+          }
         });
       }
     }
@@ -109,7 +95,7 @@ export class UsersService {
   findManyWithPagination({
     filterOptions,
     sortOptions,
-    paginationOptions,
+    paginationOptions
   }: {
     filterOptions?: FilterUserDto | null;
     sortOptions?: SortUserDto[] | null;
@@ -118,7 +104,7 @@ export class UsersService {
     return this.usersRepository.findManyWithPagination({
       filterOptions,
       sortOptions,
-      paginationOptions,
+      paginationOptions
     });
   }
 
@@ -131,90 +117,70 @@ export class UsersService {
   }
 
   findByPhoneNumber(phoneNumber: User['phoneNumber']): Promise<NullableType<User>> {
-    return this.usersRepository.findByPhoneNumber(phoneNumber);;
+    return this.usersRepository.findByPhoneNumber(phoneNumber);
   }
 
-  findBySocialIdAndProvider({
-    socialId,
-    provider,
-  }: {
-    socialId: User['socialId'];
-    provider: User['provider'];
-  }): Promise<NullableType<User>> {
+  findBySocialIdAndProvider({socialId, provider}: {socialId: User['socialId']; provider: User['provider']}): Promise<NullableType<User>> {
     return this.usersRepository.findBySocialIdAndProvider({
       socialId,
-      provider,
+      provider
     });
   }
 
-  async update(
-    id: User['id'],
-    payload: DeepPartial<User>,
-  ): Promise<User | null> {
-    const clonedPayload = { ...payload };
+  async update(id: User['id'], payload: DeepPartial<User>): Promise<User | null> {
+    const clonedPayload = {...payload};
 
-    if (
-      clonedPayload.password &&
-      clonedPayload.previousPassword !== clonedPayload.password
-    ) {
+    if (clonedPayload.password && clonedPayload.previousPassword !== clonedPayload.password) {
       const salt = await bcrypt.genSalt();
       clonedPayload.password = await bcrypt.hash(clonedPayload.password, salt);
     }
 
     if (clonedPayload.email) {
-      const userObject = await this.usersRepository.findByEmail(
-        clonedPayload.email,
-      );
+      const userObject = await this.usersRepository.findByEmail(clonedPayload.email);
 
       if (userObject && userObject.id !== id) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            email: 'emailAlreadyExists',
-          },
+            email: 'emailAlreadyExists'
+          }
         });
       }
     }
 
     if (clonedPayload.photo?.id) {
-      const fileObject = await this.filesService.findById(
-        clonedPayload.photo.id,
-      );
+      const fileObject = await this.filesService.findById(clonedPayload.photo.id);
       if (!fileObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            photo: 'imageNotExists',
-          },
+            photo: 'imageNotExists'
+          }
         });
       }
       clonedPayload.photo = fileObject;
     }
 
     if (clonedPayload.role?.id) {
-      const roleObject = Object.values(RoleEnum)
-        .map(String)
-        .includes(String(clonedPayload.role.id));
+      const roleObject = Object.values(RoleEnum).map(String).includes(String(clonedPayload.role.id));
       if (!roleObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            role: 'roleNotExists',
-          },
+            role: 'roleNotExists'
+          }
         });
       }
     }
 
     if (clonedPayload.status?.id) {
-      const statusObject = Object.values(StatusEnum)
-        .map(String)
-        .includes(String(clonedPayload.status.id));
+      const statusObject = Object.values(StatusEnum).map(String).includes(String(clonedPayload.status.id));
       if (!statusObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            status: 'statusNotExists',
-          },
+            status: 'statusNotExists'
+          }
         });
       }
     }

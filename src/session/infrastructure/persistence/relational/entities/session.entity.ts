@@ -1,26 +1,17 @@
-import {
-  CreateDateColumn,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  DeleteDateColumn,
-  Column,
-  UpdateDateColumn,
-} from 'typeorm';
-import { UserEntity } from '../../../../../users/infrastructure/persistence/relational/entities/user.entity';
+import {CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, Column, UpdateDateColumn} from 'typeorm';
+import {UserEntity} from '../../../../../users/infrastructure/persistence/relational/entities/user.entity';
 
-import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
+import {EntityRelationalHelper} from '../../../../../utils/relational-entity-helper';
 
 @Entity({
-  name: 'session',
+  name: 'session'
 })
 export class SessionEntity extends EntityRelationalHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => UserEntity, {
-    eager: true,
+    eager: true
   })
   @Index()
   user: UserEntity;

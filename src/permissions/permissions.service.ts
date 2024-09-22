@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePermissionDto } from './dto/create-permission.dto';
-import { UpdatePermissionDto } from './dto/update-permission.dto';
-import { PermissionRepository } from './infrastructure/persistence/permission.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { Permission } from './domain/permission';
+import {Injectable} from '@nestjs/common';
+import {CreatePermissionDto} from './dto/create-permission.dto';
+import {UpdatePermissionDto} from './dto/update-permission.dto';
+import {PermissionRepository} from './infrastructure/persistence/permission.repository';
+import {IPaginationOptions} from '../utils/types/pagination-options';
+import {Permission} from './domain/permission';
 
 @Injectable()
 export class PermissionsService {
@@ -13,16 +13,12 @@ export class PermissionsService {
     return this.permissionRepository.create(createPermissionDto);
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({paginationOptions}: {paginationOptions: IPaginationOptions}) {
     return this.permissionRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,
-        limit: paginationOptions.limit,
-      },
+        limit: paginationOptions.limit
+      }
     });
   }
 

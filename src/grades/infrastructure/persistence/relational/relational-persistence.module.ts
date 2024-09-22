@@ -1,17 +1,17 @@
-import { Module } from '@nestjs/common';
-import { GradeRepository } from '../grade.repository';
-import { GradeRelationalRepository } from './repositories/grade.repository';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { GradeEntity } from './entities/grade.entity';
+import {Module} from '@nestjs/common';
+import {GradeRepository} from '../grade.repository';
+import {GradeRelationalRepository} from './repositories/grade.repository';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {GradeEntity} from './entities/grade.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([GradeEntity])],
   providers: [
     {
       provide: GradeRepository,
-      useClass: GradeRelationalRepository,
-    },
+      useClass: GradeRelationalRepository
+    }
   ],
-  exports: [GradeRepository],
+  exports: [GradeRepository]
 })
 export class RelationalGradePersistenceModule {}

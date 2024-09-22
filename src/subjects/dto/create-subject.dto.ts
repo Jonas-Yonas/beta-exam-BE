@@ -1,21 +1,18 @@
 import {
   // decorators here
 
-
-IsString,
-
+  IsString
 } from 'class-validator';
 
-import { 
+import {
   // decorators here
-ApiProperty,
-
+  ApiProperty
 } from '@nestjs/swagger';
 
 export class CreateSubjectDto {
   @ApiProperty()
-    @IsString()
-        name: string;
+  @IsString()
+  name: string;
 
   // Don't forget to use the class-validator decorators in the DTO properties.
 }

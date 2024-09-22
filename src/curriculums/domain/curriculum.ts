@@ -1,11 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import {ApiProperty} from '@nestjs/swagger';
 
 export class Curriculum {
-@ApiProperty()
-name: string;
+  @ApiProperty()
+  name: string;
 
   @ApiProperty({
-    type: String,
+    type: String
   })
   id: string;
 

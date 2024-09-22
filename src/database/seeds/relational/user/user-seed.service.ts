@@ -1,26 +1,26 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import {Injectable} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
 
-import { Repository } from 'typeorm';
+import {Repository} from 'typeorm';
 import bcrypt from 'bcryptjs';
-import { RoleEnum } from '../../../../roles/roles.enum';
-import { StatusEnum } from '../../../../statuses/statuses.enum';
-import { UserEntity } from '../../../../users/infrastructure/persistence/relational/entities/user.entity';
+import {RoleEnum} from '../../../../roles/roles.enum';
+import {StatusEnum} from '../../../../statuses/statuses.enum';
+import {UserEntity} from '../../../../users/infrastructure/persistence/relational/entities/user.entity';
 
 @Injectable()
 export class UserSeedService {
   constructor(
     @InjectRepository(UserEntity)
-    private repository: Repository<UserEntity>,
+    private repository: Repository<UserEntity>
   ) {}
 
   async run() {
     const countAdmin = await this.repository.count({
       where: {
         role: {
-          id: RoleEnum.admin,
-        },
-      },
+          id: RoleEnum.admin
+        }
+      }
     });
 
     if (!countAdmin) {
@@ -36,22 +36,22 @@ export class UserSeedService {
           password,
           role: {
             id: RoleEnum.admin,
-            name: 'Admin',
+            name: 'Admin'
           },
           status: {
             id: StatusEnum.active,
-            name: 'Active',
-          },
-        }),
+            name: 'Active'
+          }
+        })
       );
     }
 
     const countUser = await this.repository.count({
       where: {
         role: {
-          id: RoleEnum.user,
-        },
-      },
+          id: RoleEnum.user
+        }
+      }
     });
 
     if (!countUser) {
@@ -67,13 +67,13 @@ export class UserSeedService {
           password,
           role: {
             id: RoleEnum.user,
-            name: 'Admin',
+            name: 'Admin'
           },
           status: {
             id: StatusEnum.active,
-            name: 'Active',
-          },
-        }),
+            name: 'Active'
+          }
+        })
       );
     }
   }

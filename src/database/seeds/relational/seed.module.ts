@@ -1,26 +1,26 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import {Module} from '@nestjs/common';
+import {ConfigModule} from '@nestjs/config';
+import {TypeOrmModule} from '@nestjs/typeorm';
 
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { TypeOrmConfigService } from '../../typeorm-config.service';
-import { RoleSeedModule } from './role/role-seed.module';
-import { StatusSeedModule } from './status/status-seed.module';
-import { UserSeedModule } from './user/user-seed.module';
+import {DataSource, DataSourceOptions} from 'typeorm';
+import {TypeOrmConfigService} from '../../typeorm-config.service';
+import {RoleSeedModule} from './role/role-seed.module';
+import {StatusSeedModule} from './status/status-seed.module';
+import {UserSeedModule} from './user/user-seed.module';
 import databaseConfig from '../../config/database.config';
 import appConfig from '../../../config/app.config';
 
-import { PermissionSeedModule } from './permission/permission-seed.module';
+import {PermissionSeedModule} from './permission/permission-seed.module';
 
-import { GradeSeedModule } from './grade/grade-seed.module';
+import {GradeSeedModule} from './grade/grade-seed.module';
 
-import { SubjectSeedModule } from './subject/subject-seed.module';
+import {SubjectSeedModule} from './subject/subject-seed.module';
 
-import { ChapterSeedModule } from './chapter/chapter-seed.module';
+import {ChapterSeedModule} from './chapter/chapter-seed.module';
 
-import { CurriculumSeedModule } from './curriculum/curriculum-seed.module';
+import {CurriculumSeedModule} from './curriculum/curriculum-seed.module';
 
-import { QuestionSeedModule } from './question/question-seed.module';
+import {QuestionSeedModule} from './question/question-seed.module';
 
 @Module({
   imports: [
@@ -36,14 +36,14 @@ import { QuestionSeedModule } from './question/question-seed.module';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig, appConfig],
-      envFilePath: ['.env'],
+      envFilePath: ['.env']
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
       dataSourceFactory: async (options: DataSourceOptions) => {
         return new DataSource(options).initialize();
-      },
-    }),
-  ],
+      }
+    })
+  ]
 })
 export class SeedModule {}

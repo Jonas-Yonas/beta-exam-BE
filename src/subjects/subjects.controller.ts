@@ -1,46 +1,27 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Query,
-} from '@nestjs/common';
-import { SubjectsService } from './subjects.service';
-import { CreateSubjectDto } from './dto/create-subject.dto';
-import { UpdateSubjectDto } from './dto/update-subject.dto';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
-import { Subject } from './domain/subject';
-import { AuthGuard } from '@nestjs/passport';
-import {
-  InfinityPaginationResponse,
-  InfinityPaginationResponseDto,
-} from '../utils/dto/infinity-pagination-response.dto';
-import { infinityPagination } from '../utils/infinity-pagination';
-import { FindAllSubjectsDto } from './dto/find-all-subjects.dto';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query} from '@nestjs/common';
+import {SubjectsService} from './subjects.service';
+import {CreateSubjectDto} from './dto/create-subject.dto';
+import {UpdateSubjectDto} from './dto/update-subject.dto';
+import {ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiTags} from '@nestjs/swagger';
+import {Subject} from './domain/subject';
+import {AuthGuard} from '@nestjs/passport';
+import {InfinityPaginationResponse, InfinityPaginationResponseDto} from '../utils/dto/infinity-pagination-response.dto';
+import {infinityPagination} from '../utils/infinity-pagination';
+import {FindAllSubjectsDto} from './dto/find-all-subjects.dto';
 
 @ApiTags('Subjects')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller({
   path: 'subjects',
-  version: '1',
+  version: '1'
 })
 export class SubjectsController {
   constructor(private readonly subjectsService: SubjectsService) {}
 
   @Post()
   @ApiCreatedResponse({
-    type: Subject,
+    type: Subject
   })
   create(@Body() createSubjectDto: CreateSubjectDto) {
     return this.subjectsService.create(createSubjectDto);
@@ -48,11 +29,9 @@ export class SubjectsController {
 
   @Get()
   @ApiOkResponse({
-    type: InfinityPaginationResponse(Subject),
+    type: InfinityPaginationResponse(Subject)
   })
-  async findAll(
-    @Query() query: FindAllSubjectsDto,
-  ): Promise<InfinityPaginationResponseDto<Subject>> {
+  async findAll(@Query() query: FindAllSubjectsDto): Promise<InfinityPaginationResponseDto<Subject>> {
     const page = query?.page ?? 1;
     let limit = query?.limit ?? 10;
     if (limit > 50) {
@@ -63,10 +42,10 @@ export class SubjectsController {
       await this.subjectsService.findAllWithPagination({
         paginationOptions: {
           page,
-          limit,
-        },
+          limit
+        }
       }),
-      { page, limit },
+      {page, limit}
     );
   }
 
@@ -74,10 +53,10 @@ export class SubjectsController {
   @ApiParam({
     name: 'id',
     type: String,
-    required: true,
+    required: true
   })
   @ApiOkResponse({
-    type: Subject,
+    type: Subject
   })
   findOne(@Param('id') id: string) {
     return this.subjectsService.findOne(id);
@@ -87,15 +66,12 @@ export class SubjectsController {
   @ApiParam({
     name: 'id',
     type: String,
-    required: true,
+    required: true
   })
   @ApiOkResponse({
-    type: Subject,
+    type: Subject
   })
-  update(
-    @Param('id') id: string,
-    @Body() updateSubjectDto: UpdateSubjectDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateSubjectDto: UpdateSubjectDto) {
     return this.subjectsService.update(id, updateSubjectDto);
   }
 
@@ -103,7 +79,7 @@ export class SubjectsController {
   @ApiParam({
     name: 'id',
     type: String,
-    required: true,
+    required: true
   })
   remove(@Param('id') id: string) {
     return this.subjectsService.remove(id);

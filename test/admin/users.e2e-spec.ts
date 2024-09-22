@@ -1,7 +1,7 @@
-import { APP_URL, ADMIN_EMAIL, ADMIN_PASSWORD } from '../utils/constants';
+import {APP_URL, ADMIN_EMAIL, ADMIN_PASSWORD} from '../utils/constants';
 import request from 'supertest';
-import { RoleEnum } from '../../src/roles/roles.enum';
-import { StatusEnum } from '../../src/statuses/statuses.enum';
+import {RoleEnum} from '../../src/roles/roles.enum';
+import {StatusEnum} from '../../src/statuses/statuses.enum';
 
 describe('Users Module', () => {
   const app = APP_URL;
@@ -10,8 +10,8 @@ describe('Users Module', () => {
   beforeAll(async () => {
     await request(app)
       .post('/api/v1/auth/email/login')
-      .send({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD })
-      .then(({ body }) => {
+      .send({email: ADMIN_EMAIL, password: ADMIN_PASSWORD})
+      .then(({body}) => {
         apiToken = body.token;
       });
   });
@@ -30,13 +30,13 @@ describe('Users Module', () => {
           email: newUserEmail,
           password: newUserPassword,
           firstName: `First${Date.now()}`,
-          lastName: 'E2E',
+          lastName: 'E2E'
         });
 
       await request(app)
         .post('/api/v1/auth/email/login')
-        .send({ email: newUserEmail, password: newUserPassword })
-        .then(({ body }) => {
+        .send({email: newUserEmail, password: newUserPassword})
+        .then(({body}) => {
           newUser = body.user;
         });
     });
@@ -46,11 +46,11 @@ describe('Users Module', () => {
         return request(app)
           .patch(`/api/v1/users/${newUser.id}`)
           .auth(apiToken, {
-            type: 'bearer',
+            type: 'bearer'
           })
           .send({
             email: newUserChangedEmail,
-            password: newUserChangedPassword,
+            password: newUserChangedPassword
           })
           .expect(200);
       });
@@ -61,10 +61,10 @@ describe('Users Module', () => {
             .post('/api/v1/auth/email/login')
             .send({
               email: newUserChangedEmail,
-              password: newUserChangedPassword,
+              password: newUserChangedPassword
             })
             .expect(200)
-            .expect(({ body }) => {
+            .expect(({body}) => {
               expect(body.token).toBeDefined();
             });
         });
@@ -81,9 +81,9 @@ describe('Users Module', () => {
         return request(app)
           .post(`/api/v1/users`)
           .auth(apiToken, {
-            type: 'bearer',
+            type: 'bearer'
           })
-          .send({ email: 'fail-data' })
+          .send({email: 'fail-data'})
           .expect(422);
       });
 
@@ -91,7 +91,7 @@ describe('Users Module', () => {
         return request(app)
           .post(`/api/v1/users`)
           .auth(apiToken, {
-            type: 'bearer',
+            type: 'bearer'
           })
           .send({
             email: newUserByAdminEmail,
@@ -99,11 +99,11 @@ describe('Users Module', () => {
             firstName: `UserByAdmin${Date.now()}`,
             lastName: 'E2E',
             role: {
-              id: RoleEnum.user,
+              id: RoleEnum.user
             },
             status: {
-              id: StatusEnum.active,
-            },
+              id: StatusEnum.active
+            }
           })
           .expect(201);
       });
@@ -114,10 +114,10 @@ describe('Users Module', () => {
             .post('/api/v1/auth/email/login')
             .send({
               email: newUserByAdminEmail,
-              password: newUserByAdminPassword,
+              password: newUserByAdminPassword
             })
             .expect(200)
-            .expect(({ body }) => {
+            .expect(({body}) => {
               expect(body.token).toBeDefined();
             });
         });
@@ -131,11 +131,11 @@ describe('Users Module', () => {
         return request(app)
           .get(`/api/v1/users`)
           .auth(apiToken, {
-            type: 'bearer',
+            type: 'bearer'
           })
           .expect(200)
           .send()
-          .expect(({ body }) => {
+          .expect(({body}) => {
             expect(body.data[0].provider).toBeDefined();
             expect(body.data[0].email).toBeDefined();
             expect(body.data[0].hash).not.toBeDefined();

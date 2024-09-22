@@ -1,85 +1,66 @@
+import {IsString, IsUUID} from 'class-validator';
+
 import {
-
-IsString,
-IsUUID,
-
-
-
-
-
-
-
-} from 'class-validator';
-
-import { 
   // decorators here
-ApiProperty,
-
+  ApiProperty
 } from '@nestjs/swagger';
-
 
 export class CreateQuestionDto {
   @ApiProperty()
   status: number;
   @ApiProperty()
-    @IsString()
-        content: string;
+  @IsString()
+  content: string;
   @ApiProperty()
-    @IsString()
-        reference: string;
+  @IsString()
+  reference: string;
   @ApiProperty()
-    @IsString()
-        explanation: string;
+  @IsString()
+  explanation: string;
   @ApiProperty()
-    @IsString()
-    answer: string;
-  @ApiProperty()  
-    @IsString()
-    option_0: string;
+  @IsString()
+  answer: string;
   @ApiProperty()
-    @IsString()
-    option_1: string;
+  @IsString()
+  option_0: string;
   @ApiProperty()
-    @IsString()
-    option_2: string;
+  @IsString()
+  option_1: string;
   @ApiProperty()
-    @IsString()
-    option_3: string;
+  @IsString()
+  option_2: string;
   @ApiProperty()
-    @IsString()
-    option_4: string;
-    @IsString()
-    added_by: string;
-  @ApiProperty()  
-    @IsString()
-    test_type: string;
+  @IsString()
+  option_3: string;
   @ApiProperty()
-    @IsString()
-    source: string;
+  @IsString()
+  option_4: string;
+  @IsString()
+  added_by: string;
   @ApiProperty()
-    @IsUUID()
-    chapterId: string;
+  @IsString()
+  test_type: string;
   @ApiProperty()
-    @IsUUID()
-    subjectId: string;
+  @IsString()
+  source: string;
   @ApiProperty()
-    @IsUUID()
-    gradeId: string;
+  @IsUUID()
+  chapterId: string;
   @ApiProperty()
-    @IsUUID()
-    curriculumId: string;
+  @IsUUID()
+  subjectId: string;
   @ApiProperty()
-    @IsString()
-    difficulty_level: string;
+  @IsUUID()
+  gradeId: string;
   @ApiProperty()
-    @IsString()
-    question_type: string;
-
-
-
-
-
-
+  @IsUUID()
+  curriculumId: string;
+  @ApiProperty()
+  @IsString()
+  difficulty_level: string;
+  @ApiProperty()
+  @IsString()
+  question_type: string;
 
   // Don't forget to use the class-validator decorators in the DTO properties.
 }

@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCurriculumDto } from './dto/create-curriculum.dto';
-import { UpdateCurriculumDto } from './dto/update-curriculum.dto';
-import { CurriculumRepository } from './infrastructure/persistence/curriculum.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { Curriculum } from './domain/curriculum';
+import {Injectable} from '@nestjs/common';
+import {CreateCurriculumDto} from './dto/create-curriculum.dto';
+import {UpdateCurriculumDto} from './dto/update-curriculum.dto';
+import {CurriculumRepository} from './infrastructure/persistence/curriculum.repository';
+import {IPaginationOptions} from '../utils/types/pagination-options';
+import {Curriculum} from './domain/curriculum';
 
 @Injectable()
 export class CurriculumsService {
@@ -13,16 +13,12 @@ export class CurriculumsService {
     return this.curriculumRepository.create(createCurriculumDto);
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({paginationOptions}: {paginationOptions: IPaginationOptions}) {
     return this.curriculumRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,
-        limit: paginationOptions.limit,
-      },
+        limit: paginationOptions.limit
+      }
     });
   }
 

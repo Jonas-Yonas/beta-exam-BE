@@ -1,71 +1,71 @@
-import { Exclude, Expose } from 'class-transformer';
-import { FileType } from '../../files/domain/file';
-import { Role } from '../../roles/domain/role';
-import { Status } from '../../statuses/domain/status';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {Exclude, Expose} from 'class-transformer';
+import {FileType} from '../../files/domain/file';
+import {Role} from '../../roles/domain/role';
+import {Status} from '../../statuses/domain/status';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 
 const idType = Number;
 
 export class User {
-@ApiPropertyOptional()
-phoneNumber?: string;
+  @ApiPropertyOptional()
+  phoneNumber?: string;
 
   @ApiProperty({
-    type: idType,
+    type: idType
   })
   id: number | string;
 
   @ApiProperty({
     type: String,
-    example: 'john.doe@example.com',
+    example: 'john.doe@example.com'
   })
-  @Expose({ groups: ['me', 'admin'] })
+  @Expose({groups: ['me', 'admin']})
   email: string | null;
 
-  @Exclude({ toPlainOnly: true })
+  @Exclude({toPlainOnly: true})
   password?: string;
 
-  @Exclude({ toPlainOnly: true })
+  @Exclude({toPlainOnly: true})
   previousPassword?: string;
 
   @ApiProperty({
     type: String,
-    example: 'email',
+    example: 'email'
   })
-  @Expose({ groups: ['me', 'admin'] })
+  @Expose({groups: ['me', 'admin']})
   provider: string;
 
   @ApiProperty({
     type: String,
-    example: '1234567890',
+    example: '1234567890'
   })
-  @Expose({ groups: ['me', 'admin'] })
+  @Expose({groups: ['me', 'admin']})
   socialId?: string | null;
 
   @ApiProperty({
     type: String,
-    example: 'John',
+    example: 'John'
   })
   firstName: string | null;
 
   @ApiProperty({
     type: String,
-    example: 'Doe',
+    example: 'Doe'
   })
   lastName: string | null;
 
   @ApiProperty({
-    type: () => FileType,
+    type: () => FileType
   })
   photo?: FileType | null;
 
   @ApiProperty({
-    type: () => Role,
+    type: () => Role
   })
   role?: Role | null;
 
   @ApiProperty({
-    type: () => Status,
+    type: () => Status
   })
   status?: Status;
 

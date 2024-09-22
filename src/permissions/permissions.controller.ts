@@ -1,46 +1,27 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Query,
-} from '@nestjs/common';
-import { PermissionsService } from './permissions.service';
-import { CreatePermissionDto } from './dto/create-permission.dto';
-import { UpdatePermissionDto } from './dto/update-permission.dto';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
-import { Permission } from './domain/permission';
-import { AuthGuard } from '@nestjs/passport';
-import {
-  InfinityPaginationResponse,
-  InfinityPaginationResponseDto,
-} from '../utils/dto/infinity-pagination-response.dto';
-import { infinityPagination } from '../utils/infinity-pagination';
-import { FindAllPermissionsDto } from './dto/find-all-permissions.dto';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query} from '@nestjs/common';
+import {PermissionsService} from './permissions.service';
+import {CreatePermissionDto} from './dto/create-permission.dto';
+import {UpdatePermissionDto} from './dto/update-permission.dto';
+import {ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiTags} from '@nestjs/swagger';
+import {Permission} from './domain/permission';
+import {AuthGuard} from '@nestjs/passport';
+import {InfinityPaginationResponse, InfinityPaginationResponseDto} from '../utils/dto/infinity-pagination-response.dto';
+import {infinityPagination} from '../utils/infinity-pagination';
+import {FindAllPermissionsDto} from './dto/find-all-permissions.dto';
 
 @ApiTags('Permissions')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller({
   path: 'permissions',
-  version: '1',
+  version: '1'
 })
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
   @Post()
   @ApiCreatedResponse({
-    type: Permission,
+    type: Permission
   })
   create(@Body() createPermissionDto: CreatePermissionDto) {
     return this.permissionsService.create(createPermissionDto);
@@ -48,11 +29,9 @@ export class PermissionsController {
 
   @Get()
   @ApiOkResponse({
-    type: InfinityPaginationResponse(Permission),
+    type: InfinityPaginationResponse(Permission)
   })
-  async findAll(
-    @Query() query: FindAllPermissionsDto,
-  ): Promise<InfinityPaginationResponseDto<Permission>> {
+  async findAll(@Query() query: FindAllPermissionsDto): Promise<InfinityPaginationResponseDto<Permission>> {
     const page = query?.page ?? 1;
     let limit = query?.limit ?? 10;
     if (limit > 50) {
@@ -63,10 +42,10 @@ export class PermissionsController {
       await this.permissionsService.findAllWithPagination({
         paginationOptions: {
           page,
-          limit,
-        },
+          limit
+        }
       }),
-      { page, limit },
+      {page, limit}
     );
   }
 
@@ -74,10 +53,10 @@ export class PermissionsController {
   @ApiParam({
     name: 'id',
     type: String,
-    required: true,
+    required: true
   })
   @ApiOkResponse({
-    type: Permission,
+    type: Permission
   })
   findOne(@Param('id') id: string) {
     return this.permissionsService.findOne(id);
@@ -87,15 +66,12 @@ export class PermissionsController {
   @ApiParam({
     name: 'id',
     type: String,
-    required: true,
+    required: true
   })
   @ApiOkResponse({
-    type: Permission,
+    type: Permission
   })
-  update(
-    @Param('id') id: string,
-    @Body() updatePermissionDto: UpdatePermissionDto,
-  ) {
+  update(@Param('id') id: string, @Body() updatePermissionDto: UpdatePermissionDto) {
     return this.permissionsService.update(id, updatePermissionDto);
   }
 
@@ -103,7 +79,7 @@ export class PermissionsController {
   @ApiParam({
     name: 'id',
     type: String,
-    required: true,
+    required: true
   })
   remove(@Param('id') id: string) {
     return this.permissionsService.remove(id);

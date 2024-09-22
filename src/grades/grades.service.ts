@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { CreateGradeDto } from './dto/create-grade.dto';
-import { UpdateGradeDto } from './dto/update-grade.dto';
-import { GradeRepository } from './infrastructure/persistence/grade.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { Grade } from './domain/grade';
+import {Injectable} from '@nestjs/common';
+import {CreateGradeDto} from './dto/create-grade.dto';
+import {UpdateGradeDto} from './dto/update-grade.dto';
+import {GradeRepository} from './infrastructure/persistence/grade.repository';
+import {IPaginationOptions} from '../utils/types/pagination-options';
+import {Grade} from './domain/grade';
 
 @Injectable()
 export class GradesService {
@@ -13,16 +13,12 @@ export class GradesService {
     return this.gradeRepository.create(createGradeDto);
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({paginationOptions}: {paginationOptions: IPaginationOptions}) {
     return this.gradeRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,
-        limit: paginationOptions.limit,
-      },
+        limit: paginationOptions.limit
+      }
     });
   }
 

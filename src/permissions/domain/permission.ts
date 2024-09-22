@@ -1,14 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
+import {ApiProperty} from '@nestjs/swagger';
 
 export class Permission {
-@ApiProperty()
-description: string;
+  @ApiProperty()
+  description: string;
 
-@ApiProperty()
-name: string;
+  @ApiProperty()
+  name: string;
 
   @ApiProperty({
-    type: String,
+    type: String
   })
   id: string;
 
